@@ -36,6 +36,8 @@ public class Robot extends TimedRobot {
   private CANSparkMax l_motor3 = new CANSparkMax (5, MotorType.kBrushless);
 // definining pivot motors 
   private CANSparkMax pivot_motor =  new CANSparkMax (6, MotorType.kBrushless);
+ //defining claw motor
+  private CANSparkMax claw_motor = new CANSparkMax (7, MotorType.kBrushless);
 
 //drivetrain controls
   private Joystick r_joystick = new Joystick(1);
@@ -43,6 +45,10 @@ public class Robot extends TimedRobot {
 // pivot controls 
   private JoystickButton pivot_up = new JoystickButton(r_joystick,2);
   private JoystickButton pivot_down = new JoystickButton(r_joystick,3);
+
+//claw controls
+  private JoystickButton claw_open = new JoystickButton(r_joystick, 4);
+  private JoystickButton claw_close = new JoystickButton(r_joystick, 5);
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -62,7 +68,8 @@ public class Robot extends TimedRobot {
   l_motor3.setIdleMode(IdleMode.kBrake);
   //setting idlemode for pivot
   pivot_motor.setIdleMode(IdleMode.kBrake);
-
+  //setting idlemode for claw
+  claw_motor.setIdleMode(IdleMode.kBrake);
 
 
   //subsequent right motor follows next one
@@ -76,7 +83,9 @@ public class Robot extends TimedRobot {
  // r_motor1.setInverted(true);
  // l_motor1.setInverted(true);
  //inverting pivot motor
- pivot_motor.setInverted(true);
+ //pivot_motor.setInverted(true);
+ //inverting claw motor
+ //claw_motor.setInverted(true);
 
 
 
@@ -151,6 +160,14 @@ public class Robot extends TimedRobot {
     pivot_motor.set(-0.5);
   } else {
     pivot_motor.set(0);
+  }
+
+  if (claw_open.getAsBoolean()) {
+    claw_motor.set(0.5);
+  } else if (claw_close.getAsBoolean()) {
+    claw_motor.set(-0.5);
+  } else {
+    claw_motor.set(0);
   }
 }
 
