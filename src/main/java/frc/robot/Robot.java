@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -33,10 +34,15 @@ public class Robot extends TimedRobot {
   private CANSparkMax l_motor1 = new CANSparkMax (3, MotorType.kBrushless);
   private CANSparkMax l_motor2 = new CANSparkMax (4, MotorType.kBrushless);
   private CANSparkMax l_motor3 = new CANSparkMax (5, MotorType.kBrushless);
+// definining pivot motors 
+  private CANSparkMax pivot_motor =  new CANSparkMax (6, MotorType.kBrushless);
 
-//joysticks
+//drivetrain controls
   private Joystick r_joystick = new Joystick(1);
   private Joystick l_joystick = new Joystick(0);
+// pivot controls 
+  private JoystickButton pivot_up = new JoystickButton(r_joystick,2);
+  private JoystickButton pivot_down = new JoystickButton(r_joystick,3);
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -47,13 +53,17 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-  //setting idlemode
+  //setting idlemode for drivetrain
   r_motor1.setIdleMode(IdleMode.kBrake);
   r_motor2.setIdleMode(IdleMode.kBrake);
   r_motor3.setIdleMode(IdleMode.kBrake);
   l_motor1.setIdleMode(IdleMode.kBrake);
   l_motor2.setIdleMode(IdleMode.kBrake);
   l_motor3.setIdleMode(IdleMode.kBrake);
+  //setting idlemode for pivot
+  pivot_motor.setIdleMode(IdleMode.kBrake);
+
+
 
   //subsequent right motor follows next one
   r_motor3.follow(r_motor2);
@@ -62,9 +72,12 @@ public class Robot extends TimedRobot {
   l_motor3.follow(l_motor2);
   l_motor2.follow(l_motor1);
 
-  //inverting motors
-  r_motor1.setInverted(true);
-  l_motor1.setInverted(true);
+  //inverting drivetrain motors
+ // r_motor1.setInverted(true);
+ // l_motor1.setInverted(true);
+ //inverting pivot motor
+ pivot_motor.setInverted(true);
+
 
 
   }
@@ -130,6 +143,13 @@ public class Robot extends TimedRobot {
   //arcade
   r_motor1.set(l_joystick.getY()-r_joystick.getX());
   l_motor1.set(l_joystick.getY()+r_joystick.getX());
+
+  if (pivot_up) {
+    pivot_motor.set(0.5); 
+  } else if (pivot_down.getAsBoolean()) {
+    pivot_motor.set(-0.5);
+  } else 
+    pivot_motor.set(0);
   }
 
   /** This function is called once when the robot is disabled. */
