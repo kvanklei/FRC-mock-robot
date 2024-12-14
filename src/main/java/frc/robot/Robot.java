@@ -80,6 +80,7 @@ public class Robot extends TimedRobot {
 
 
 
+
   }
 
 
@@ -144,13 +145,14 @@ public class Robot extends TimedRobot {
   r_motor1.set(l_joystick.getY()-r_joystick.getX());
   l_motor1.set(l_joystick.getY()+r_joystick.getX());
 
-  if (pivot_up) {
+  if (pivot_up.getAsBoolean()) {
     pivot_motor.set(0.5); 
   } else if (pivot_down.getAsBoolean()) {
     pivot_motor.set(-0.5);
-  } else 
+  } else {
     pivot_motor.set(0);
   }
+}
 
   /** This function is called once when the robot is disabled. */
   @Override
